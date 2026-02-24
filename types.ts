@@ -1,36 +1,44 @@
-export enum SectorType {
-  ADMINISTRATIVE = 'Administrativo',
-  ACADEMIC = 'Acadêmico',
-  MANAGEMENT = 'Gestão',
-  EXTERNAL = 'Outro'
+export interface CompetencyDefinition {
+  id: string;
+  name: string;
+  category: 'Técnica' | 'Comportamental' | 'Gestão';
+  description: string;
 }
 
-export enum Methodology {
-  PRESENTIAL = 'Cursos presenciais',
-  EAD = 'Cursos EAD (Moodle/UNEAD)',
-  WORKSHOPS = 'Oficinas práticas',
-  WEBINARS = 'Webinars quinzenais',
-  MENTORSHIP = 'Mentoria interna',
-  MANUALS = 'Manuais operacionais'
+export interface RoleProfile {
+  id: string;
+  label: string;
+  family: 'Técnico Universitário' | 'Analista Universitário';
+  requiredLevels: Record<string, number>;
 }
 
-export interface TrainingAxis {
+export interface Course {
   id: string;
   title: string;
-  description: string;
-  topics: string[];
+  modality: 'EAD' | 'Presencial' | 'Híbrido';
+  workloadHours: number;
+  competencies: string[];
+  level: number;
 }
 
-export interface SurveyResponse {
-  department: string;
+export interface RecommendationInput {
+  roleId: string;
   campus: string;
-  role: string;
-  selectedTopics: string[];
-  customSuggestions: string;
-  preferredMethodologies: string[];
+  unit: string;
+  currentLevels: Record<string, number>;
+  learningGoals: string;
 }
 
-export interface DashboardStat {
-  name: string;
-  value: number;
+export interface RecommendationItem {
+  course: Course;
+  score: number;
+  reasons: string[];
+  coveredGaps: string[];
+}
+
+export interface RecommendationResult {
+  input: RecommendationInput;
+  role: RoleProfile;
+  gaps: Record<string, number>;
+  recommendations: RecommendationItem[];
 }
