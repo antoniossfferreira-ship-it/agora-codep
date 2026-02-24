@@ -1,0 +1,27 @@
+{
+  "E1": {
+    "nome": "Gestão Administrativa e Operacional",
+    "peso": 0.25,
+    "competencias": ["proc-adm", "compras"]
+  },
+  "E2": {
+    "nome": "Gestão Acadêmica",
+    "peso": 0.2,
+    "competencias": ["gestao-acad", "atendimento"]
+  },
+  "E3": {
+    "nome": "Transformação Digital e Dados",
+    "peso": 0.2,
+    "competencias": ["dados-digitais"]
+  },
+  "E4": {
+    "nome": "Comunicação e Relacionamento",
+    "peso": 0.15,
+    "competencias": ["atendimento"]
+  },
+  "E5": {
+    "nome": "Planejamento e Desenvolvimento Institucional",
+    "peso": 0.2,
+    "competencias": ["planejamento", "proc-adm"]
+  }
+}

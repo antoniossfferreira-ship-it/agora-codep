@@ -1,11 +1,21 @@
-import React, { useMemo, useState } from 'react';
-import { COMPETENCIES, ROLE_PROFILES } from '../constants';
-import { RecommendationInput } from '../types';
+import React, { useEffect, useMemo, useState } from 'react';
+import { COMPETENCIES } from '../constants';
+import { RecommendationInput, ServerProfile } from '../types';
 import { Sparkles } from 'lucide-react';
+import matrix from '../data/matriz_competencias_uneb.json';
+import competenciesByFunction from '../data/competencias_por_funcao_uneb.json';
+import unebStructure from '../data/uneb_structure.json';
 
 interface SurveyFormProps {
   onComplete: (response: RecommendationInput) => void;
 }
+
+type FunctionMap = Record<string, { eixo_prioritario: string; competencias: Record<string, number> }>;
+const functionMap = competenciesByFunction as FunctionMap;
+
+const matrixCompetencies = new Set(
+  Object.values(matrix).flatMap((eixo) => eixo.competencias),
+);
 
 const buildInitialLevels = () =>
   COMPETENCIES.reduce<Record<string, number>>((acc, competency) => {
@@ -13,21 +23,61 @@ const buildInitialLevels = () =>
     return acc;
   }, {});
 
-export const SurveyForm: React.FC<SurveyFormProps> = ({ onComplete }) => {
-  const [formData, setFormData] = useState<RecommendationInput>({
-    roleId: ROLE_PROFILES[0].id,
-    campus: '',
-    unit: '',
-    currentLevels: buildInitialLevels(),
-    learningGoals: '',
+const buildExpectedForFunction = (functionName: string) => {
+  const expected = COMPETENCIES.reduce<Record<string, number>>((acc, competency) => {
+    acc[competency.id] = 2;
+    return acc;
+  }, {});
+
+  const mapping = functionMap[functionName];
+  if (!mapping) return expected;
+
+  Object.entries(mapping.competencias).forEach(([competencyId, level]) => {
+    if (matrixCompetencies.has(competencyId) && expected[competencyId] !== undefined) {
+      expected[competencyId] = level;
+    }
   });
 
-  const selectedRole = useMemo(
-    () => ROLE_PROFILES.find((role) => role.id === formData.roleId) ?? ROLE_PROFILES[0],
-    [formData.roleId],
+  return expected;
+};
+
+export const SurveyForm: React.FC<SurveyFormProps> = ({ onComplete }) => {
+  const defaultFunction = unebStructure.funcoes[0] || Object.keys(functionMap)[0];
+
+  const [profile, setProfile] = useState<ServerProfile>({
+    role: unebStructure.cargos[0] || 'Técnico Universitário',
+    function: defaultFunction,
+    department: unebStructure.unidades[0] || '',
+    campus: unebStructure.campi[0] || '',
+  });
+
+  const [formData, setFormData] = useState<RecommendationInput>({
+    roleId: 'tecnico-administrativo',
+    campus: profile.campus,
+    unit: profile.department,
+    currentLevels: buildInitialLevels(),
+    learningGoals: '',
+    expectedLevels: buildExpectedForFunction(defaultFunction),
+    profile,
+  });
+
+  const expectedLevels = useMemo(
+    () => buildExpectedForFunction(profile.function),
+    [profile.function],
   );
 
-  const canSubmit = Boolean(formData.campus.trim() && formData.unit.trim());
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      campus: profile.campus,
+      unit: profile.department,
+      profile,
+      expectedLevels,
+      roleId: profile.role === 'Analista Universitário' ? 'analista-gestao' : 'tecnico-administrativo',
+    }));
+  }, [profile, expectedLevels]);
+
+  const canSubmit = Boolean(profile.campus && profile.department && profile.function && profile.role);
 
   return (
     <form
@@ -35,43 +85,67 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ onComplete }) => {
       onSubmit={(e) => {
         e.preventDefault();
         if (!canSubmit) return;
-        onComplete(formData);
+        onComplete({ ...formData, expectedLevels, profile });
       }}
     >
       <div className="bg-white border border-slate-200 rounded-2xl p-6">
-        <h2 className="text-2xl font-bold text-slate-900">Análise de competências por cargo</h2>
+        <h2 className="text-2xl font-bold text-slate-900">Perfil e análise de competências</h2>
         <p className="text-slate-600 mt-2">
-          Informe cargo/função e nível atual (1 a 5) para gerar recomendações de cursos aderentes
-          às competências esperadas.
+          Selecione cargo/carreira, função e unidade para carregar automaticamente os níveis esperados.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4">
-        <select
-          className="rounded-xl border border-slate-300 px-4 py-3 bg-white"
-          value={formData.roleId}
-          onChange={(e) => setFormData((prev) => ({ ...prev, roleId: e.target.value }))}
-        >
-          {ROLE_PROFILES.map((role) => (
-            <option key={role.id} value={role.id}>
-              {role.label}
-            </option>
-          ))}
-        </select>
+      <div className="bg-white border border-slate-200 rounded-2xl p-6">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">Perfil</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <select
+            className="rounded-xl border border-slate-300 px-4 py-3 bg-white"
+            value={profile.role}
+            onChange={(e) => setProfile((prev) => ({ ...prev, role: e.target.value }))}
+          >
+            {unebStructure.cargos.map((role) => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
+          </select>
 
-        <input
-          className="rounded-xl border border-slate-300 px-4 py-3"
-          placeholder="Campus"
-          value={formData.campus}
-          onChange={(e) => setFormData((prev) => ({ ...prev, campus: e.target.value }))}
-        />
+          <select
+            className="rounded-xl border border-slate-300 px-4 py-3 bg-white"
+            value={profile.function}
+            onChange={(e) => setProfile((prev) => ({ ...prev, function: e.target.value }))}
+          >
+            {Object.keys(functionMap).map((fn) => (
+              <option key={fn} value={fn}>
+                {fn}
+              </option>
+            ))}
+          </select>
 
-        <input
-          className="rounded-xl border border-slate-300 px-4 py-3"
-          placeholder="Unidade/Setor"
-          value={formData.unit}
-          onChange={(e) => setFormData((prev) => ({ ...prev, unit: e.target.value }))}
-        />
+          <select
+            className="rounded-xl border border-slate-300 px-4 py-3 bg-white"
+            value={profile.department}
+            onChange={(e) => setProfile((prev) => ({ ...prev, department: e.target.value }))}
+          >
+            {unebStructure.unidades.map((unit) => (
+              <option key={unit} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="rounded-xl border border-slate-300 px-4 py-3 bg-white"
+            value={profile.campus}
+            onChange={(e) => setProfile((prev) => ({ ...prev, campus: e.target.value }))}
+          >
+            {unebStructure.campi.map((campus) => (
+              <option key={campus} value={campus}>
+                {campus}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl p-6">
@@ -79,14 +153,14 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ onComplete }) => {
         <div className="space-y-4">
           {COMPETENCIES.map((competency) => {
             const current = formData.currentLevels[competency.id];
-            const target = selectedRole.requiredLevels[competency.id] ?? 3;
+            const target = expectedLevels[competency.id] ?? 2;
 
             return (
               <div key={competency.id} className="border border-slate-200 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-slate-800">{competency.name}</p>
-                    <p className="text-xs text-slate-500">{competency.category} • alvo para o cargo: {target}</p>
+                    <p className="text-xs text-slate-500">{competency.category} • alvo para a função: {target}</p>
                   </div>
                   <span className="text-sm font-medium text-blue-800">Nível atual: {current}</span>
                 </div>
@@ -106,7 +180,6 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ onComplete }) => {
                   }
                   className="w-full mt-3"
                 />
-                <p className="text-xs text-slate-500 mt-2">{competency.description}</p>
               </div>
             );
           })}
@@ -115,7 +188,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({ onComplete }) => {
         <textarea
           className="mt-4 w-full rounded-xl border border-slate-300 px-4 py-3"
           rows={3}
-          placeholder="Objetivos de aprendizagem (opcional): ex. preparação para assumir função de coordenação."
+          placeholder="Objetivos de aprendizagem (opcional)."
           value={formData.learningGoals}
           onChange={(e) => setFormData((prev) => ({ ...prev, learningGoals: e.target.value }))}
         />

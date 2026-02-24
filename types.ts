@@ -21,12 +21,21 @@ export interface Course {
   level: number;
 }
 
+export interface ServerProfile {
+  role: string;
+  function: string;
+  department: string;
+  campus: string;
+}
+
 export interface RecommendationInput {
   roleId: string;
   campus: string;
   unit: string;
   currentLevels: Record<string, number>;
   learningGoals: string;
+  expectedLevels?: Record<string, number>;
+  profile?: ServerProfile;
 }
 
 export interface RecommendationItem {
