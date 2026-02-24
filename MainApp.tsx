@@ -19,7 +19,7 @@ function MainApp() {
           )}
 
           {viewState === 'survey' && (
-            <SurveyForm onComplete={() => setViewState('results')} />
+            <SurveyForm onComplete={(_response) => setViewState('results')} />
           )}
 
           {viewState === 'results' && (
