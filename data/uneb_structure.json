@@ -1,0 +1,27 @@
+{
+  "cargos": [
+    "Técnico Universitário",
+    "Analista Universitário"
+  ],
+  "funcoes": [
+    "Assistente de Secretaria Acadêmica",
+    "Assistente Administrativo",
+    "Analista de Planejamento",
+    "Analista de Gestão de Pessoas",
+    "Analista de Contratos e Convênios"
+  ],
+  "unidades": [
+    "PROAD",
+    "PROPLAN",
+    "PROGRAD",
+    "PGDP",
+    "Secretaria Geral de Cursos"
+  ],
+  "campi": [
+    "Salvador",
+    "Alagoinhas",
+    "Juazeiro",
+    "Serrinha",
+    "Jacobina"
+  ]
+}

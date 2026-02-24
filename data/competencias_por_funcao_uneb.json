@@ -1,0 +1,47 @@
+{
+  "Assistente de Secretaria Acadêmica": {
+    "eixo_prioritario": "E2",
+    "competencias": {
+      "gestao-acad": 4,
+      "proc-adm": 4,
+      "atendimento": 4,
+      "dados-digitais": 3
+    }
+  },
+  "Assistente Administrativo": {
+    "eixo_prioritario": "E1",
+    "competencias": {
+      "proc-adm": 4,
+      "compras": 3,
+      "dados-digitais": 3,
+      "planejamento": 3
+    }
+  },
+  "Analista de Planejamento": {
+    "eixo_prioritario": "E5",
+    "competencias": {
+      "planejamento": 5,
+      "dados-digitais": 4,
+      "proc-adm": 4,
+      "compras": 3
+    }
+  },
+  "Analista de Gestão de Pessoas": {
+    "eixo_prioritario": "E4",
+    "competencias": {
+      "atendimento": 4,
+      "planejamento": 4,
+      "proc-adm": 3,
+      "dados-digitais": 3
+    }
+  },
+  "Analista de Contratos e Convênios": {
+    "eixo_prioritario": "E1",
+    "competencias": {
+      "compras": 5,
+      "proc-adm": 4,
+      "planejamento": 4,
+      "dados-digitais": 3
+    }
+  }
+}

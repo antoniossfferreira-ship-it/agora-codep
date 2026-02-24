@@ -1,90 +1,133 @@
-import { TrainingAxis, Methodology } from './types';
+import { CompetencyDefinition, Course, RoleProfile } from './types';
 
-export const TRAINING_AXES: TrainingAxis[] = [
+export const COMPETENCIES: CompetencyDefinition[] = [
   {
-    id: 'eixo1',
-    title: 'Eixo 1 — Gestão Administrativa e Operacional',
-    description: 'Foco em arquivos, fluxos, compras e legislação.',
-    topics: [
-      'Gestão de arquivos e documentação',
-      'Fluxos administrativos padronizados',
-      'Compras públicas e nova lei de licitações (Lei 14.133/2021)',
-      'Gestão orçamentária básica',
-      'Gestão de contratos',
-      'Ética e responsabilidade administrativa',
-      'LAI (Lei de Acesso à Informação)'
-    ]
+    id: 'proc-adm',
+    name: 'Processos Administrativos',
+    category: 'Técnica',
+    description: 'Domínio de fluxos, protocolo, documentos e rotinas administrativas.',
   },
   {
-    id: 'eixo2',
-    title: 'Eixo 2 — Gestão Acadêmica',
-    description: 'Processos ligados à vida acadêmica e registros.',
-    topics: [
-      'Matrícula e rematrícula',
-      'Registro acadêmico',
-      'Currículo, PPCs e resoluções internas',
-      'Normas acadêmicas e calendários',
-      'Sigaa / sistemas institucionais'
-    ]
+    id: 'compras',
+    name: 'Compras e Contratos Públicos',
+    category: 'Técnica',
+    description: 'Aplicação da Lei 14.133/2021 e gestão básica de contratos.',
   },
   {
-    id: 'eixo3',
-    title: 'Eixo 3 — Tecnologias e Transformação Digital',
-    description: 'Modernização e ferramentas digitais.',
-    topics: [
-      'Excel avançado',
-      'Automação administrativa',
-      'Digitalização de processos',
-      'Segurança da informação',
-      'Introdução à programação aplicada à gestão'
-    ]
+    id: 'gestao-acad',
+    name: 'Gestão Acadêmica',
+    category: 'Técnica',
+    description: 'Normas acadêmicas, registros e suporte a sistemas acadêmicos.',
   },
   {
-    id: 'eixo4',
-    title: 'Eixo 4 — Comunicação e Relacionamento',
-    description: 'Melhoria no atendimento e clima organizacional.',
-    topics: [
-      'Redação oficial e institucional',
-      'Comunicação interna efetiva',
-      'Atendimento humanizado',
-      'Gestão de conflitos',
-      'Cultura organizacional'
-    ]
+    id: 'dados-digitais',
+    name: 'Ferramentas Digitais e Dados',
+    category: 'Técnica',
+    description: 'Uso de planilhas, automação leve e segurança da informação.',
   },
   {
-    id: 'eixo5',
-    title: 'Eixo 5 — Desenvolvimento Humano',
-    description: 'Competências comportamentais e liderança.',
-    topics: [
-      'Trabalho colaborativo',
-      'Planejamento e organização',
-      'Liderança para chefias',
-      'Inteligência emocional e bem-estar laboral'
-    ]
-  }
+    id: 'atendimento',
+    name: 'Atendimento e Comunicação Institucional',
+    category: 'Comportamental',
+    description: 'Comunicação clara, redação oficial e atendimento humanizado.',
+  },
+  {
+    id: 'planejamento',
+    name: 'Planejamento e Melhoria de Processos',
+    category: 'Gestão',
+    description: 'Priorização, gestão do trabalho e melhoria contínua.',
+  },
 ];
 
-export const METHODOLOGIES: string[] = [
-  Methodology.PRESENTIAL,
-  Methodology.EAD,
-  Methodology.WORKSHOPS,
-  Methodology.WEBINARS,
-  Methodology.MENTORSHIP,
-  Methodology.MANUALS
+export const ROLE_PROFILES: RoleProfile[] = [
+  {
+    id: 'tecnico-secretaria',
+    label: 'Técnico Universitário — Secretaria Acadêmica',
+    family: 'Técnico Universitário',
+    requiredLevels: {
+      'proc-adm': 4,
+      compras: 2,
+      'gestao-acad': 4,
+      'dados-digitais': 3,
+      atendimento: 4,
+      planejamento: 3,
+    },
+  },
+  {
+    id: 'tecnico-administrativo',
+    label: 'Técnico Universitário — Apoio Administrativo',
+    family: 'Técnico Universitário',
+    requiredLevels: {
+      'proc-adm': 4,
+      compras: 3,
+      'gestao-acad': 2,
+      'dados-digitais': 3,
+      atendimento: 3,
+      planejamento: 3,
+    },
+  },
+  {
+    id: 'analista-gestao',
+    label: 'Analista Universitário — Gestão e Planejamento',
+    family: 'Analista Universitário',
+    requiredLevels: {
+      'proc-adm': 4,
+      compras: 4,
+      'gestao-acad': 3,
+      'dados-digitais': 4,
+      atendimento: 3,
+      planejamento: 5,
+    },
+  },
 ];
 
-// Mock data for the dashboard visualization
-export const MOCK_STATS_AXES = [
-  { name: 'Gestão Admin', value: 45 },
-  { name: 'Gestão Acadêmica', value: 30 },
-  { name: 'Tecnologias', value: 65 },
-  { name: 'Comunicação', value: 25 },
-  { name: 'Desenv. Humano', value: 35 },
-];
-
-export const MOCK_STATS_METHODOLOGY = [
-  { name: 'Presencial', value: 40 },
-  { name: 'EAD / Híbrido', value: 80 },
-  { name: 'Mentoria', value: 20 },
-  { name: 'Oficinas', value: 55 },
+export const COURSES: Course[] = [
+  {
+    id: 'curso-lei14133',
+    title: 'Aplicação Prática da Lei 14.133/2021 na UNEB',
+    modality: 'Híbrido',
+    workloadHours: 30,
+    competencies: ['compras', 'proc-adm', 'planejamento'],
+    level: 4,
+  },
+  {
+    id: 'curso-secretaria',
+    title: 'Gestão Acadêmica e Registro Escolar',
+    modality: 'EAD',
+    workloadHours: 40,
+    competencies: ['gestao-acad', 'proc-adm', 'atendimento'],
+    level: 4,
+  },
+  {
+    id: 'curso-dados',
+    title: 'Excel Avançado e Indicadores para Gestão Universitária',
+    modality: 'Presencial',
+    workloadHours: 24,
+    competencies: ['dados-digitais', 'planejamento'],
+    level: 4,
+  },
+  {
+    id: 'curso-atendimento',
+    title: 'Atendimento Humanizado e Redação Oficial',
+    modality: 'EAD',
+    workloadHours: 20,
+    competencies: ['atendimento', 'proc-adm'],
+    level: 3,
+  },
+  {
+    id: 'curso-melhoria',
+    title: 'Mapeamento e Melhoria de Processos Administrativos',
+    modality: 'Híbrido',
+    workloadHours: 32,
+    competencies: ['planejamento', 'proc-adm', 'dados-digitais'],
+    level: 4,
+  },
+  {
+    id: 'curso-lgpd',
+    title: 'LGPD, Segurança da Informação e Governança de Dados',
+    modality: 'EAD',
+    workloadHours: 16,
+    competencies: ['dados-digitais', 'proc-adm'],
+    level: 3,
+  },
 ];

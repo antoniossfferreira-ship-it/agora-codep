@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, BookOpen } from 'lucide-react';
+import { GraduationCap, BrainCircuit } from 'lucide-react';
 
 export const AppHeader: React.FC = () => {
   return (
@@ -10,17 +10,19 @@ export const AppHeader: React.FC = () => {
             <GraduationCap className="h-8 w-8 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 leading-tight">PAC 2026</h1>
-            <p className="text-xs text-slate-500 font-medium tracking-wide">Plano Anual de Capacitação • UNEB</p>
+            <h1 className="text-xl font-bold text-slate-900 leading-tight">UNEB Competências</h1>
+            <p className="text-xs text-slate-500 font-medium tracking-wide">
+              Recomendação de cursos para técnico e analista universitário
+            </p>
           </div>
         </div>
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
           <span className="flex items-center gap-2">
-            <BookOpen className="h-4 w-4 text-blue-600" />
-            Consulta Pública
+            <BrainCircuit className="h-4 w-4 text-blue-600" />
+            Protótipo de Mestrado
           </span>
           <span className="text-slate-300">|</span>
-          <span>Desenvolvimento de Pessoas</span>
+          <span>Formação em serviço e continuada</span>
         </div>
       </div>
     </header>
