@@ -18,3 +18,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1aROwIDzgH-ltetVNN_Vj7F
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Documentação adicional
+
+- Guia do protótipo de recomendação por competências (UNEB): [docs/prototipo-recomendacao-competencias-UNEB.md](docs/prototipo-recomendacao-competencias-UNEB.md)
