@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { AppHeader } from './components/AppHeader';
-import { IntroSection } from './components/IntroSection';
-import { SurveyForm } from './components/SurveyForm';
-import { ResultsDashboard } from './components/ResultsDashboard';
+import { AppHeader } from './components/AppHeader.tsx';
+import { IntroSection } from './components/IntroSection.tsx';
+import { SurveyForm } from './components/SurveyForm.tsx';
+import { ResultsDashboard } from './components/ResultsDashboard.tsx';
 
 function MainApp() {
   const [viewState, setViewState] = useState<'intro' | 'survey' | 'results'>('intro');
